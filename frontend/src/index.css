@@ -1,0 +1,13 @@
+:root {
+  font-family: Arial, Helvetica, sans-serif;
+  line-height: 1.5;
+  color: #0f172a;
+  background-color: #f8fafc;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+  margin: 0;
+}
