@@ -6,14 +6,32 @@ function Book({ book, onDelete, onEdit }) {
   return (
     <div className="card">
       <h3>{book.title}</h3>
-      <p><strong>Author:</strong> {book.author}</p>
-      <p><strong>Price:</strong> ${book.price}</p>
-      <p><strong>Copies:</strong> {book.copies}</p>
+
+      <div className="info-list">
+        <div className="info-row">
+          <span className="info-label">Author</span>
+          <span className="info-value">{book.author}</span>
+        </div>
+
+        <div className="info-row">
+          <span className="info-label">Price</span>
+          <span className="info-value">${book.pubPrice ?? book.price}</span>
+        </div>
+
+        <div className="info-row">
+          <span className="info-label">Copies</span>
+          <span className="info-value">{book.copies}</span>
+        </div>
+      </div>
 
       {isAdmin && (
         <div className="button-row">
-          <button onClick={() => onEdit(book)}>Update</button>
-          <button className="delete-btn" onClick={() => onDelete(book.id)}>Delete</button>
+          <button type="button" onClick={() => onEdit(book)}>
+            Update
+          </button>
+          <button type="button" className="delete-btn" onClick={() => onDelete(book.id)}>
+            Delete
+          </button>
         </div>
       )}
     </div>

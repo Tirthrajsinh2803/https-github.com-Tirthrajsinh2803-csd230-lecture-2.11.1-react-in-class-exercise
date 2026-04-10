@@ -12,11 +12,26 @@ import ProtectedRoute from "./components/ProtectedRoute"
 import { useAuth } from "./context/authProvider"
 import Login from "./pages/Login"
 
+function HomePage() {
+  return (
+    <div className="container">
+      <div className="hero-card">
+        <h1>Modern Inventory Control</h1>
+        <p>
+          Manage your bookstore with secure access, polished presentation,
+          and cleaner inventory views for books and magazines.
+        </p>
+      </div>
+    </div>
+  )
+}
+
 function App() {
   const [books, setBooks] = useState([])
   const [magazines, setMagazines] = useState([])
   const [editingBook, setEditingBook] = useState(null)
   const [editingMagazine, setEditingMagazine] = useState(null)
+
   const { isAuthenticated } = useAuth()
   const navigate = useNavigate()
 
@@ -49,7 +64,7 @@ function App() {
     try {
       await api.post("/api/books", book)
       await fetchBooks()
-      navigate("/")
+      navigate("/books")
     } catch (error) {
       console.error("Error adding book:", error)
       alert("Book was not added.")
@@ -90,7 +105,7 @@ function App() {
       await api.put(`/api/books/${editingBook.id}`, updatedBook)
       setEditingBook(null)
       await fetchBooks()
-      navigate("/")
+      navigate("/books")
     } catch (error) {
       console.error("Error updating book:", error)
       alert("Book was not updated.")
@@ -121,7 +136,7 @@ function App() {
 
   function cancelBookEdit() {
     setEditingBook(null)
-    navigate("/")
+    navigate("/books")
   }
 
   function cancelMagazineEdit() {
@@ -130,7 +145,7 @@ function App() {
   }
 
   return (
-    <>
+    <div className="page-shell">
       <Navbar />
 
       <Routes>
@@ -140,32 +155,32 @@ function App() {
           path="/"
           element={
             <ProtectedRoute>
-              <div className="container">
-                <h2>Books</h2>
-                <div className="grid">
-                  {books.map((book) => (
-                    <Book
-                      key={book.id}
-                      book={book}
-                      onDelete={deleteBook}
-                      onEdit={handleEditBook}
-                    />
-                  ))}
-                </div>
-              </div>
+              <HomePage />
             </ProtectedRoute>
           }
         />
 
         <Route
-          path="/add-book"
+          path="/books"
           element={
-            <ProtectedRoute adminOnly>
-              <BookForm
-                onSave={editingBook ? updateBook : addBook}
-                editingBook={editingBook}
-                onCancelEdit={cancelBookEdit}
-              />
+            <ProtectedRoute>
+              <div className="container">
+                <h2 className="section-title">Book Collection</h2>
+                {books.length === 0 ? (
+                  <div className="empty-state">No books available right now.</div>
+                ) : (
+                  <div className="grid">
+                    {books.map((book) => (
+                      <Book
+                        key={book.id}
+                        book={book}
+                        onDelete={deleteBook}
+                        onEdit={handleEditBook}
+                      />
+                    ))}
+                  </div>
+                )}
+              </div>
             </ProtectedRoute>
           }
         />
@@ -175,17 +190,36 @@ function App() {
           element={
             <ProtectedRoute>
               <div className="container">
-                <h2>Magazines</h2>
-                <div className="grid">
-                  {magazines.map((magazine) => (
-                    <Magazine
-                      key={magazine.id}
-                      magazine={magazine}
-                      onDelete={deleteMagazine}
-                      onEdit={handleEditMagazine}
-                    />
-                  ))}
-                </div>
+                <h2 className="section-title">Magazine Inventory</h2>
+                {magazines.length === 0 ? (
+                  <div className="empty-state">No magazines available right now.</div>
+                ) : (
+                  <div className="grid">
+                    {magazines.map((magazine) => (
+                      <Magazine
+                        key={magazine.id}
+                        magazine={magazine}
+                        onDelete={deleteMagazine}
+                        onEdit={handleEditMagazine}
+                      />
+                    ))}
+                  </div>
+                )}
+              </div>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/add-book"
+          element={
+            <ProtectedRoute adminOnly>
+              <div className="container">
+                <BookForm
+                  onSave={editingBook ? updateBook : addBook}
+                  editingBook={editingBook}
+                  onCancelEdit={cancelBookEdit}
+                />
               </div>
             </ProtectedRoute>
           }
@@ -195,16 +229,18 @@ function App() {
           path="/add-magazine"
           element={
             <ProtectedRoute adminOnly>
-              <MagazineForm
-                onSave={editingMagazine ? updateMagazine : addMagazine}
-                editingMagazine={editingMagazine}
-                onCancelEdit={cancelMagazineEdit}
-              />
+              <div className="container">
+                <MagazineForm
+                  onSave={editingMagazine ? updateMagazine : addMagazine}
+                  editingMagazine={editingMagazine}
+                  onCancelEdit={cancelMagazineEdit}
+                />
+              </div>
             </ProtectedRoute>
           }
         />
       </Routes>
-    </>
+    </div>
   )
 }
 
