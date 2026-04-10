@@ -2,32 +2,39 @@ name: Java CI/CD Pipeline
 
 on:
   push:
-    branches:
-      - main
-      - master
-      - lab7-cloud-deployment-cicd
+    branches: [ main, master, lab5-magazine-implementation, lab7-cloud-deployment-cicd ]
+  pull_request:
+    branches: [ main, master ]
 
 jobs:
   test:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v5
+      - name: Checkout code
+        uses: actions/checkout@v5
 
-      - name: Set up JDK 17
+      - name: Set up Java
         uses: actions/setup-java@v5
         with:
+          distribution: temurin
           java-version: '17'
-          distribution: 'temurin'
           cache: maven
 
-      - name: Build and Test
-        run: mvn clean verify
+      - name: Make mvnw executable
+        run: chmod +x mvnw
+
+      - name: Run tests
+        run: ./mvnw clean test
 
   deploy:
     needs: test
     runs-on: ubuntu-latest
+    if: success()
 
     steps:
-      - name: Trigger Render
-        run: curl -f "${{ secrets.RENDER_DEPLOY_HOOK_URL }}"
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Deploy placeholder
+        run: echo "Deploy step runs only after tests pass"
