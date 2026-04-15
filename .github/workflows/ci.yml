@@ -1,0 +1,47 @@
+name: Java CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+      - master
+      - lab7-cloud-deployment-cicd
+  pull_request:
+    branches:
+      - main
+      - master
+      - lab7-cloud-deployment-cicd
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Set up Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: maven
+
+      - name: Run tests
+        run: mvn clean verify
+
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    if: success()
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Build Docker image
+        run: docker build -t lab7-app .

@@ -1,0 +1,49 @@
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  font-family: Inter, "Segoe UI", Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  color: #e5e7eb;
+  background: #0b1220;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  --bg: #0b1220;
+  --bg-soft: #111827;
+  --panel: rgba(17, 24, 39, 0.82);
+  --panel-2: rgba(15, 23, 42, 0.9);
+  --card: rgba(255, 255, 255, 0.06);
+  --card-border: rgba(255, 255, 255, 0.08);
+  --text: #f8fafc;
+  --muted: #cbd5e1;
+  --primary: #7c3aed;
+  --primary-hover: #6d28d9;
+  --secondary: #0f172a;
+  --danger: #ef4444;
+  --danger-hover: #dc2626;
+  --success: #10b981;
+  --warning: #f59e0b;
+  --shadow: 0 20px 45px rgba(0, 0, 0, 0.35);
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  min-height: 100%;
+  min-width: 320px;
+  background:
+    radial-gradient(circle at top left, rgba(124, 58, 237, 0.16), transparent 30%),
+    radial-gradient(circle at top right, rgba(59, 130, 246, 0.14), transparent 30%),
+    linear-gradient(180deg, #0b1220 0%, #111827 100%);
+  color: var(--text);
+}
+
+body {
+  min-height: 100vh;
+}
